@@ -1,0 +1,79 @@
+On my honor, I have neither received nor given any unauthorized assistance on this assignment.
+
+SET CUSTOM_RACKET_FITTING_EQUIP_FEE TO 150
+SET SHOE_FITTING_EQUIP_FEE TO 100
+SET GREEN_LEVEL_MEMBERSHIP_FEE TO 50
+SET PLATINUM_LEVEL_MEMBERSHIP_FEE TO 200
+SET BUNDLES_PRICE TO 200
+SET PLATINUM_LEVEL_MEMBERSHIP_DISCOUNT_GLO TO 0.1
+SET GREEN_LEVEL_DISCOUNT_IN_EQUIP TO 0.1
+SET BUNDLE_DISCOUNT TO 0.1
+SET SALES_TAX_RATE TO 0.07
+
+SET totalPricePreTax TO 0.00
+SET salesTax TO 0.00
+SET finalCost TO 0.00
+SET discount TO 0.00
+
+INPUT isEquipmentRacketSelected
+INPUT isEquipmentShoesSelected
+INPUT numLessonBundles
+INPUT isClubMembership
+INPUT memberShipType
+
+IF isClubMembership THEN
+    IF memberShipType EQUALS "Green" THEN
+        SET totalPricePreTax TO totalPricePreTax + GREEN_LEVEL_MEMBERSHIP_FEE
+        IF isEquipmentRacketSelected THEN
+            SET discount TO discount + (CUSTOM_RACKET_FITTING_EQUIP_FEE * GREEN_LEVEL_DISCOUNT_IN_EQUIP)
+            SET totalPricePreTax TO totalPricePreTax + CUSTOM_RACKET_FITTING_EQUIP_FEE
+        END IF
+        IF isEquipmentShoesSelected THEN
+            SET discount TO discount + (SHOE_FITTING_EQUIP_FEE * GREEN_LEVEL_DISCOUNT_IN_EQUIP)
+            SET totalPricePreTax TO totalPricePreTax + SHOE_FITTING_EQUIP_FEE * GREEN_LEVEL_DISCOUNT_IN_EQUIP
+        END IF
+        IF numLessonBundles >= 5 THEN
+            SET discount TO discount + (BUNDLES_PRICE * numLessonBundles * BUNDLE_DISCOUNT)
+            SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+        ELSE
+            SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+        END IF
+    ELSE IF memberShipType EQUALS "Platinum" THEN
+        SET totalPricePreTax TO totalPricePreTax + PLATINUM_LEVEL_MEMBERSHIP_FEE
+        IF isEquipmentRacketSelected THEN
+            SET totalPricePreTax TO totalPricePreTax + CUSTOM_RACKET_FITTING_EQUIP_FEE
+        END IF
+        IF isEquipmentShoesSelected THEN
+            SET totalPricePreTax TO totalPricePreTax + SHOE_FITTING_EQUIP_FEE
+        END IF
+        IF numLessonBundles >= 5 THEN
+            SET discount TO discount + (BUNDLES_PRICE * numLessonBundles * BUNDLE_DISCOUNT)
+            SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+        ELSE
+            SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+        END IF
+    END IF
+ELSE
+    IF isEquipmentRacketSelected THEN
+        SET totalPricePreTax TO totalPricePreTax + CUSTOM_RACKET_FITTING_EQUIP_FEE
+    END IF
+    IF isEquipmentShoesSelected THEN
+        SET totalPricePreTax TO totalPricePreTax + SHOE_FITTING_EQUIP_FEE
+    END IF
+    IF numLessonBundles >= 5 THEN
+        SET discount TO discount + (BUNDLES_PRICE * numLessonBundles * BUNDLE_DISCOUNT)
+        SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+    ELSE
+        SET totalPricePreTax TO totalPricePreTax + BUNDLES_PRICE * numLessonBundles
+    END IF
+END IF
+IF memberShipType EQUALS "Platinum" THEN
+    SET discount TO discount + (totalPricePreTax * PLATINUM_LEVEL_MEMBERSHIP_DISCOUNT_GLO)
+END IF
+SET salesTax TO (totalPricePreTax - discount) * SALES_TAX_RATE
+SET finalCost TO totalPricePreTax - discount + salesTax
+
+DISPLAY totalPricePreTax
+DISPLAY salesTax
+DISPLAY finalCost
+DISPLAY discount
