@@ -6,7 +6,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,7 +24,7 @@ public class SpringConfigParser {
         SAXReader saxReader = new SAXReader();
         InputStream inputStream = null;
         try {
-            // 通过 输入流， 通过 SpringConfigParser 的 类加载器，获取 applicationContext 的项目路径
+            // 通过 输入流， 通过 SpringConfigParser 的 类加载器，获取 applicationContext.xml 的路径
             inputStream = SpringConfigParser.class.getClassLoader().getResourceAsStream(springConfig);
             // 读取该 xml文件
             Document document = saxReader.read(inputStream);
